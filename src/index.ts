@@ -1,10 +1,16 @@
 import 'dotenv/config'
 import express from 'express'
+import { AppDataSource } from './data-source'
 import routes from './routes'
 
-const app = express()
-
-app.use(express.json())
-app.use(routes)
-
-app.listen(process.env.PORT, ()=> console.log('porta funcionando'))
+AppDataSource.initialize().then(() => {
+    const app = express()
+    
+    app.use(express.json())
+    app.use(routes)
+    
+    return app.listen(process.env.PORT, ()=> console.log('porta funcionando'))
+}).catch((error) => {
+    console.log(error);
+    
+})
